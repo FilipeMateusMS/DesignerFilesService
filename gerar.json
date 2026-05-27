@@ -1,0 +1,57 @@
+{
+  "parteSemana": [
+    {
+      "semana": "2026-05-31",
+      "partes": [
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Carlos Henrique",
+          "nmAjudante": "Marcos Vinicius",
+          "codigoParte": 101
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Fernanda Oliveira",
+          "nmAjudante": "Juliana Souza",
+          "codigoParte": 102
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Ricardo Almeida",
+          "nmAjudante": "Patricia Lima",
+          "codigoParte": 103
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "André Martins",
+          "nmAjudante": "Camila Rocha",
+          "codigoParte": 104
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Lucas Ferreira",
+          "nmAjudante": "Bruno Santos",
+          "codigoParte": 201
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Amanda Costa",
+          "nmAjudante": "Tatiane Alves",
+          "codigoParte": 202
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Gustavo Ribeiro",
+          "nmAjudante": "Vanessa Cardoso",
+          "codigoParte": 203
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Eduardo Nunes",
+          "nmAjudante": "Priscila Mendes",
+          "codigoParte": 204
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Tem que apagar a pasta target quando atualizar qualquer arquivo de templates.
