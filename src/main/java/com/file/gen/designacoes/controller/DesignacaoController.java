@@ -1,7 +1,7 @@
 package com.file.gen.designacoes.controller;
 
 import com.file.gen.designacoes.dto.DesignacaoRequest;
-import com.file.gen.designacoes.service.DesinacaoService2;
+import com.file.gen.designacoes.service.DesinacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DesignacaoController {
 
-    private final DesinacaoService2 desinacaoService;
+    private final DesinacaoService desinacaoService;
 
     @PostMapping
     public ResponseEntity<Void> gerarDesinacoes(@RequestBody @Valid DesignacaoRequest designacoes ) throws Exception {

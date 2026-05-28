@@ -11,7 +11,6 @@ import org.jodconverter.core.office.OfficeManager;
 import org.jodconverter.local.JodConverter;
 import org.jodconverter.local.office.LocalOfficeManager;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ import java.util.Locale;
 
 @Service
 @Log4j2
-public class DesinacaoService2 {
+public class DesinacaoService {
 
     @Value("${application.folderOutput}")
     private String folderOutput;
@@ -167,7 +166,7 @@ public class DesinacaoService2 {
                 grupo
         );
 
-        converterPdf1(
+        converterPdf(
                 odtSaida,
                 pdfSaida
         );
@@ -220,7 +219,7 @@ public class DesinacaoService2 {
             );
 
             xml = xml.replace(
-                    "{{codigoParte[" + i + "]}}",
+                    "{{cdPrt[" + i + "]}}",
                     parte != null
                             ? parte.codigoParte().toString()
                             : ""
@@ -234,7 +233,7 @@ public class DesinacaoService2 {
 
         Files.delete(odtPath);
 
-        ZipUtils.zip2(
+        ZipUtils.zip(
                 tempDir,
                 odtPath
         );
@@ -244,18 +243,7 @@ public class DesinacaoService2 {
         );
     }
 
-    private void converterPdf2(
-            Path arquivoOdt,
-            Path arquivoPdf
-    ) throws Exception {
-
-        JodConverter
-                .convert(arquivoOdt.toFile())
-                .to(arquivoPdf.toFile())
-                .execute();
-    }
-
-    private void converterPdf1(
+    private void converterPdf(
             Path arquivoOdt,
             Path arquivoPdf
     ) throws Exception {

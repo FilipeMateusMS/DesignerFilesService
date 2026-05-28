@@ -50,7 +50,8 @@ public class ZipUtils {
             }
         }
     }
-    public static void zip2(
+    // Usado
+    public static void zip(
             Path sourceDir,
             Path output
     ) throws IOException {
@@ -107,43 +108,6 @@ public class ZipUtils {
 
                             ZipEntry zipEntry =
                                     new ZipEntry(entryName);
-
-                            zos.putNextEntry(zipEntry);
-
-                            Files.copy(path, zos);
-
-                            zos.closeEntry();
-
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }
-    }
-
-
-    public static void zip(
-            Path sourceDir,
-            Path output
-    ) throws IOException {
-
-        try (ZipOutputStream zos =
-                     new ZipOutputStream(
-                             Files.newOutputStream(output)
-                     )) {
-
-            Files.walk(sourceDir)
-                    .filter(path -> !Files.isDirectory(path))
-                    .forEach(path -> {
-
-                        ZipEntry zipEntry =
-                                new ZipEntry(
-                                        sourceDir
-                                                .relativize(path)
-                                                .toString()
-                                );
-
-                        try {
 
                             zos.putNextEntry(zipEntry);
 

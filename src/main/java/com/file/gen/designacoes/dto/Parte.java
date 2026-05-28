@@ -11,7 +11,7 @@ public record Parte(
         @NotBlank( message = "Deve informar o nome principal da parte")
         String nmPrincipal,
 
-        @NotBlank( message = "Deve informar o nome do ajundante da parte")
+        ///@NotBlank( message = "Deve informar o nome do ajundante da parte")
         String nmAjudante,
 
         @NotNull( message = "Deve informar o número da parte")

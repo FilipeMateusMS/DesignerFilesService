@@ -3,4 +3,5 @@ spring:
     name: designacoes
 
 application:
-  folderOutput: "C:/Projetos/FilesDesigner/files/Gerados"
+  ##folderOutput: "C:/Projetos/FilesDesigner/files/Gerados"
+  folderOutput: "G:/Meu Drive/Temporarios/Gerados"
