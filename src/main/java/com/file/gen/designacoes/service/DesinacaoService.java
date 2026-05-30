@@ -32,13 +32,11 @@ public class DesinacaoService {
 
     private static final DateTimeFormatter FORMATADOR_DATA =
             DateTimeFormatter.ofPattern(
-                    "dd 'de' MMMM 'de' yyyy",
-                    new Locale("pt", "BR")
+                    "dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR")
             );
 
     public static String formatar(LocalDate data) {
         String texto = data.format(FORMATADOR_DATA);
-
         return texto.substring(0, 6)
                 + Character.toUpperCase(texto.charAt(6))
                 + texto.substring(7);
@@ -100,11 +98,7 @@ public class DesinacaoService {
                             Math.min(i + 4, partes.size())
                     );
 
-            gerarDocumento(
-                    grupo,
-                    template,
-                    contador++
-            );
+            gerarDocumento( grupo, template, contador++ );
         }
     }
 
@@ -113,9 +107,7 @@ public class DesinacaoService {
         if (grupo.isEmpty()) return "parte_vazio";
         ParteUnica primeiraParte = grupo.getFirst();
 
-        String sala = primeiraParte.isSalaA()
-                        ? "SalaA"
-                        : "SalaB";
+        String sala = primeiraParte.isSalaA() ? "SalaA" : "SalaB";
 
         StringBuilder nomeArquivo = new StringBuilder(sala)
                 .append("_")
@@ -140,20 +132,12 @@ public class DesinacaoService {
     ) throws Exception {
 
         Path pastaSaida = Path.of(folderOutput);
-
         String nmArquivo = obterNmArquivo( grupo, numeroArquivo );
-
         Path odtSaida = pastaSaida.resolve(nmArquivo + ".odt");
-
-        Path pdfSaida =
-                pastaSaida.resolve(
-                        nmArquivo + ".pdf"
-                );
+        Path pdfSaida = pastaSaida.resolve(nmArquivo + ".pdf" );
 
         Files.createDirectories(pastaSaida);
-
-        ClassPathResource resource =
-                new ClassPathResource(templatePath);
+        ClassPathResource resource = new ClassPathResource(templatePath);
 
         Files.copy(
                 resource.getInputStream(),
@@ -161,15 +145,8 @@ public class DesinacaoService {
                 StandardCopyOption.REPLACE_EXISTING
         );
 
-        substituirVariaveisOdt(
-                odtSaida,
-                grupo
-        );
-
-        converterPdf(
-                odtSaida,
-                pdfSaida
-        );
+        substituirVariaveisOdt( odtSaida, grupo );
+        converterPdf( odtSaida, pdfSaida );
     }
 
     private void substituirVariaveisOdt(
@@ -177,24 +154,14 @@ public class DesinacaoService {
             List<ParteUnica> grupo
     ) throws Exception {
 
-        Path tempDir =
-                Files.createTempDirectory(
-                        "odt-temp"
-                );
+        Path tempDir = Files.createTempDirectory("odt-temp" );
+        ZipUtils.unzip( odtPath, tempDir );
 
-        ZipUtils.unzip(
-                odtPath,
-                tempDir
-        );
-
-        Path contentXml =
-                tempDir.resolve("content.xml");
-
+        Path contentXml = tempDir.resolve("content.xml");
         String xml = Files.readString(contentXml);
 
         for (int i = 0; i < 4; i++) {
-            ParteUnica parte =
-                    i < grupo.size()
+            ParteUnica parte = i < grupo.size()
                             ? grupo.get(i)
                             : null;
             log.info( "item={}, ParteUnica ={}", i, parte );
@@ -226,41 +193,22 @@ public class DesinacaoService {
             );
         }
 
-        Files.writeString(
-                contentXml,
-                xml
-        );
-
+        Files.writeString( contentXml, xml );
         Files.delete(odtPath);
-
-        ZipUtils.zip(
-                tempDir,
-                odtPath
-        );
-
-        FileUtils.deleteDirectory(
-                tempDir.toFile()
-        );
+        ZipUtils.zip( tempDir, odtPath );
+        FileUtils.deleteDirectory( tempDir.toFile() );
     }
 
-    private void converterPdf(
-            Path arquivoOdt,
-            Path arquivoPdf
-    ) throws Exception {
-        OfficeManager officeManager =
-                LocalOfficeManager.builder()
+    private void converterPdf( Path arquivoOdt, Path arquivoPdf ) throws Exception
+    {
+        OfficeManager officeManager = LocalOfficeManager.builder()
                         .install()
                         .build();
-
         officeManager.start();
-
         try {
-
-            JodConverter
-                    .convert(arquivoOdt.toFile())
+            JodConverter.convert(arquivoOdt.toFile())
                     .to(arquivoPdf.toFile())
                     .execute();
-
         } finally {
             officeManager.stop();
         }
