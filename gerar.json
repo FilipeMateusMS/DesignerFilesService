@@ -1,55 +1,218 @@
 {
   "parteSemana": [
     {
-      "semana": "2026-05-31",
+      "semana": "2026-06-03",
       "partes": [
         {
-          "isSalaA": true,
-          "nmPrincipal": "Carlos Henrique",
-          "nmAjudante": "Marcos Vinicius",
-          "codigoParte": 101
-        },
-        {
-          "isSalaA": true,
-          "nmPrincipal": "Fernanda Oliveira",
-          "nmAjudante": "Juliana Souza",
-          "codigoParte": 102
+          "isSalaA": false,
+          "nmPrincipal": "Thiago",
+          "codigoParte": 3
         },
         {
           "isSalaA": true,
-          "nmPrincipal": "Ricardo Almeida",
-          "nmAjudante": "Patricia Lima",
-          "codigoParte": 103
+          "nmPrincipal": "Israel Vieira",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Rute",
+          "nmAjudante": "Teresinha",
+          "codigoParte": 4
         },
         {
           "isSalaA": true,
-          "nmPrincipal": "André Martins",
-          "nmAjudante": "Camila Rocha",
-          "codigoParte": 104
+          "nmPrincipal": "Urânia",
+          "nmAjudante": "Cristiane",
+          "codigoParte": 4
         },
         {
           "isSalaA": false,
-          "nmPrincipal": "Lucas Ferreira",
-          "nmAjudante": "Bruno Santos",
-          "codigoParte": 201
+          "nmPrincipal": "Laís",
+          "nmAjudante": "Eliane",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Giovana",
+          "nmAjudante": "Cida Silva",
+          "codigoParte": 5
         },
         {
           "isSalaA": false,
-          "nmPrincipal": "Amanda Costa",
-          "nmAjudante": "Tatiane Alves",
-          "codigoParte": 202
+          "nmPrincipal": "Fernanda",
+          "nmAjudante": "Adelina",
+          "codigoParte": 6
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Aurineide",
+          "nmAjudante": "Ana Cristina",
+          "codigoParte": 6
+        }
+      ]
+    },
+    {
+      "semana": "2026-06-10",
+      "partes": [
+        {
+          "isSalaA": false,
+          "nmPrincipal": "José Alves",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Edilton",
+          "codigoParte": 3
         },
         {
           "isSalaA": false,
-          "nmPrincipal": "Gustavo Ribeiro",
-          "nmAjudante": "Vanessa Cardoso",
-          "codigoParte": 203
+          "nmPrincipal": "Jordânia",
+          "nmAjudante": "Delci",
+          "codigoParte": 4
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Lúcia Almeida",
+          "nmAjudante": "Lara",
+          "codigoParte": 4
         },
         {
           "isSalaA": false,
-          "nmPrincipal": "Eduardo Nunes",
-          "nmAjudante": "Priscila Mendes",
-          "codigoParte": 204
+          "nmPrincipal": "Cleidimar",
+          "nmAjudante": "Daniele",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Cecília Alves",
+          "nmAjudante": "Keliana",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Izabel",
+          "nmAjudante": "Adelina",
+          "codigoParte": 6
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Cida Queiroz",
+          "nmAjudante": "Jaqueline",
+          "codigoParte": 6
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Mariana",
+          "nmAjudante": "Livramento",
+          "codigoParte": 7
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Raíze",
+          "nmAjudante": "Stênia",
+          "codigoParte": 7
+        }
+      ]
+    },
+    {
+      "semana": "2026-06-17",
+      "partes": [
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Carlos",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Isael",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Ana Cristina",
+          "nmAjudante": "Bianca",
+          "codigoParte": 4
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Helena",
+          "nmAjudante": "Cleidiane",
+          "codigoParte": 4
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Cristiane",
+          "nmAjudante": "Stênia",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Jane",
+          "nmAjudante": "Raimunda",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Júlia",
+          "nmAjudante": "Giovana",
+          "codigoParte": 6
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Fernanda",
+          "nmAjudante": "Aurineide",
+          "codigoParte": 6
+        }
+      ]
+    },
+    {
+      "semana": "2026-06-24",
+      "partes": [
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Marcos Lucena",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Roberto B.",
+          "codigoParte": 3
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Antonieta",
+          "nmAjudante": "Cida Queiroz",
+          "codigoParte": 4
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Madalena",
+          "nmAjudante": "Maria Mendes",
+          "codigoParte": 4
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Bianca",
+          "nmAjudante": "Livramento",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Adelina",
+          "nmAjudante": "Urânia",
+          "codigoParte": 5
+        },
+        {
+          "isSalaA": false,
+          "nmPrincipal": "Jordânia",
+          "nmAjudante": "Jaqueline",
+          "codigoParte": 6
+        },
+        {
+          "isSalaA": true,
+          "nmPrincipal": "Raíze",
+          "nmAjudante": "Teresinha",
+          "codigoParte": 6
         }
       ]
     }
