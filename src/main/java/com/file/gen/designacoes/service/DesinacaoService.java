@@ -7,6 +7,7 @@ import com.file.gen.designacoes.dto.ParteUnica;
 import com.file.gen.designacoes.util.ZipUtils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.jodconverter.core.office.OfficeManager;
 import org.jodconverter.local.JodConverter;
 import org.jodconverter.local.office.LocalOfficeManager;
@@ -14,14 +15,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+
+import static org.apache.pdfbox.io.IOUtils.createMemoryOnlyStreamCache;
 
 @Service
 @Log4j2
@@ -29,6 +33,9 @@ public class DesinacaoService {
 
     @Value("${application.folderOutput}")
     private String folderOutput;
+
+    @Value("${application.folderPdfOutput}")
+    private String folderPdfOutput;
 
     private static final DateTimeFormatter FORMATADOR_DATA =
             DateTimeFormatter.ofPattern(
@@ -68,22 +75,61 @@ public class DesinacaoService {
             }
         }
 
+        List<String> arquivosEmpacotar = new ArrayList<>();
+
         processarSala(
+                arquivosEmpacotar,
                 parteSalaA,
                 "templates/SalaADesignacao.odt"
         );
         log.info( "Quantidade de partes da sala A= {}", parteSalaA.size() );
 
         processarSala(
+                arquivosEmpacotar,
                 parteSalaB,
                 "templates/SalaBDesignacao.odt"
         );
 
-        log.info( "Quantidade de partes da sala B= {}", parteSalaB.size() );
+        empacotar( arquivosEmpacotar );
+
+        log.info( "Geração finalizado partes da sala A= {}, partes da sala B={}", parteSalaA.size(), parteSalaB.size() );
+    }
+
+    private void empacotar( List<String> arquivosEmpacotar ) throws IOException {
+
+        Path pastaDestino = Path.of( folderPdfOutput );
+
+        if (!Files.exists(pastaDestino)) {
+            Files.createDirectories(pastaDestino);
+        }
+
+        Path pdfFinal = pastaDestino.resolve(
+                "Designção-"
+                        + formatar( LocalDate.now() )
+                        + " .pdf");
+
+        PDFMergerUtility merger = new PDFMergerUtility();
+        for (String arquivo : arquivosEmpacotar) {
+            if( !arquivo.endsWith( ".pdf" ) )
+                throw new IllegalStateException( "Arquivo deve ser um .pdf" );
+            Path pdf = Path.of(arquivo);
+
+            if (Files.exists(pdf)) {
+                merger.addSource(pdf.toFile());
+            } else {
+                throw new FileNotFoundException( "Arquivo não encontrado: " + pdf);
+            }
+        }
+
+        merger.setDestinationFileName(pdfFinal.toString());
+        merger.mergeDocuments( createMemoryOnlyStreamCache() );
+        log.info( "PDF gerado: {}", pdfFinal);
     }
 
 
+
     private void processarSala(
+            List<String> arquivosEmpacotar,
             List<ParteUnica> partes,
             String template
     ) throws Exception {
@@ -98,7 +144,7 @@ public class DesinacaoService {
                             Math.min(i + 4, partes.size())
                     );
 
-            gerarDocumento( grupo, template, contador++ );
+            arquivosEmpacotar.add( gerarDocumento( grupo, template, contador++ ) );
         }
     }
 
@@ -125,12 +171,11 @@ public class DesinacaoService {
         return nomeArquivo.toString();
     }
 
-    private void gerarDocumento(
+    private String gerarDocumento(
             List<ParteUnica> grupo,
             String templatePath,
             int numeroArquivo
     ) throws Exception {
-
         Path pastaSaida = Path.of(folderOutput);
         String nmArquivo = obterNmArquivo( grupo, numeroArquivo );
         Path odtSaida = pastaSaida.resolve(nmArquivo + ".odt");
@@ -144,15 +189,15 @@ public class DesinacaoService {
                 odtSaida,
                 StandardCopyOption.REPLACE_EXISTING
         );
-
         substituirVariaveisOdt( odtSaida, grupo );
         converterPdf( odtSaida, pdfSaida );
+        return pdfSaida
+                .toAbsolutePath()
+                .normalize()
+                .toString();
     }
 
-    private void substituirVariaveisOdt(
-            Path odtPath,
-            List<ParteUnica> grupo
-    ) throws Exception {
+    private void substituirVariaveisOdt( Path odtPath, List<ParteUnica> grupo ) throws Exception {
 
         Path tempDir = Files.createTempDirectory("odt-temp" );
         ZipUtils.unzip( odtPath, tempDir );
@@ -161,42 +206,47 @@ public class DesinacaoService {
         String xml = Files.readString(contentXml);
 
         for (int i = 0; i < 4; i++) {
-            ParteUnica parte = i < grupo.size()
-                            ? grupo.get(i)
-                            : null;
+
+           // Parte pode ser inexistente
+            ParteUnica parte = i < grupo.size() ? grupo.get(i) : null;
             log.info( "item={}, ParteUnica ={}", i, parte );
 
-            xml = xml.replace(
-                    "{{nmPrincipal[" + i + "]}}",
-                    parte != null
-                            ? parte.nmPrincipal()
-                            : ""
-            );
-
-            String dataFormatada = "";
-            if( parte != null ) dataFormatada = formatar( parte.semana() );
-
-            xml = xml.replace("{{semana[" + i + "]}}", dataFormatada );
-
-            xml = xml.replace(
-                    "{{nmAjudante[" + i + "]}}",
-                    parte != null
-                            ? parte.nmAjudante()
-                            : ""
-            );
-
-            xml = xml.replace(
-                    "{{cdPrt[" + i + "]}}",
-                    parte != null
-                            ? parte.codigoParte().toString()
-                            : ""
-            );
+            if (parte == null) {
+                xml = replaceXml( xml,"nmPrincipal", "", i, 13  );
+                xml = replaceXml( xml,"semana", "", i, 13  );
+                xml = replaceXml( xml, "nmAjudante", "", i, 13 );
+                xml = replaceXml( xml, "cdPrt", "", i, 13 );
+            }
+            else{
+                xml = replaceXml( xml,"nmPrincipal", parte.nmPrincipal() , i, 13  );
+                xml = replaceXml( xml,"semana", formatar( parte.semana() ), i, 13  );
+                xml = replaceXml( xml, "nmAjudante", parte.nmAjudante(), i, 13 );
+                xml = replaceXml( xml, "cdPrt", Integer.toString( parte.codigoParte() ), i, 13 );
+            }
         }
 
         Files.writeString( contentXml, xml );
         Files.delete(odtPath);
         ZipUtils.zip( tempDir, odtPath );
         FileUtils.deleteDirectory( tempDir.toFile() );
+    }
+
+    private String replaceXml( String xml, String key, String value, int ordem, int qtSpaces ) throws Exception {
+        if (xml == null) return null;
+        if( value == null ) value = "";
+
+        int qtCaracteresValue = value.length();
+        if( ( ordem == 0 || ordem == 2 ) && qtCaracteresValue < qtSpaces )
+        {
+            value = value + " ".repeat( qtSpaces - qtCaracteresValue );
+            log.info( "Substituição gerada para a chave: '" + key +"' com valor'" + value + "'" );
+        }
+        String fullKey = "{{" + key + "[" + ordem  + "]}}";
+
+        // Valida se existe a chave no documento
+        //if( xml.contains( fullKey ) ) throw new Exception( "Chave: '" + fullKey + "' não encontrada no documento" );
+
+        return xml.replace( fullKey, value );
     }
 
     private void converterPdf( Path arquivoOdt, Path arquivoPdf ) throws Exception
